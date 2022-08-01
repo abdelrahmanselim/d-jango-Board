@@ -1,0 +1,81 @@
+{% extends 'board/base.html' %}
+ {% block nav%}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Home </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if user.is_superuser %}
+          <a class="nav-link active" aria-current="page" href="/admin">Manage Blog</a>
+        {% endif %}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <span class="text-success">{{user.username}}</span>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">My Acount</a>
+                <a class="dropdown-item" href="{% url 'logout' %}/">Logout</a>
+                <a class="dropdown-item" href="{% url 'changepass' %}">Change Password</a>
+          </div>
+          </div>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="login/">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup/">Sign Up</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+  {% endblock %}
+{% block content %}
+<div class="text-center">
+  <h1 class="">Mini Facbook</h1>
+</div>
+
+  <table class="table table-success table-striped   ">
+  <thead class="table-dark">
+    <tr table-info>
+      <th scope="col">Category</th>
+      <th scope="col">Post</th>
+      <th scope="col">Comment</th>
+      <th scope="col">Last Post</th>
+    </tr>
+  </thead>
+
+<h1>{{i.title}}</h1>
+
+  <tbody>
+  {% for i in cat %}
+    <tr>
+      <td>
+        <a class="link-dark" href="{% url 'cat' i.id %}" >
+          <button class="btn btn-outline-warning">{{i.name}}</button>
+        </a>
+        <br>
+      <small>{{post.pk.count}}</small>
+      </td>
+      <td>{{i.post}}</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+  {% endblock %}

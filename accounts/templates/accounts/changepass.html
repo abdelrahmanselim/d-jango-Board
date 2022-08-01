@@ -1,0 +1,21 @@
+{% extends 'board/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div class="my-5 mx-5">
+<h1 class="text-center m-3 justify-content-center">Change Password</h1>
+<div class="w-100 justify-content-center m- ">
+    <form method="post" class="w-100 d-flex justify-content-center"  novalidate >
+    {% csrf_token %}
+
+        <div class="text-center ">
+        {{ form|crispy }}
+ <a href="{% url 'passchanged' %}" class=" justify-content-center btn btn-dark" type="submit">Change Password</a>
+            <div class="m-2">
+               <a href="{% url 'index' %}" >Back To Home</a>
+            </div>
+    </div>
+        </form>
+</div>
+    </div>
+{% endblock %}

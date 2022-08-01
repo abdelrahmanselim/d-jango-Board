@@ -1,0 +1,19 @@
+{% extends 'board/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="text-center justify-content-center mt-5 ">
+<form method="post">
+    {% csrf_token %}
+    <div class="alert alert-danger" role="alert">
+  Are you sure you want to delete "{{ object }}
+</div>
+     <div >
+        {{ form|crispy }}
+     </div>
+    <input type="submit" class="btn btn-danger" value="Confirm">
+    <a href="{% url 'index' %}" class="btn btn-success" value="Cancel"> Cancel</a>
+</form>
+    </div>
+  {% endblock %}
+

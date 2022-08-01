@@ -1,0 +1,23 @@
+{% extends 'board/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<h1 class="text-center m-3 justify-content-center">SignUp</h1>
+<div class="w-100 justify-content-center m-3 ">
+    <form method="post" class="w-100 d-flex justify-content-center"  novalidate >
+    {% csrf_token %}
+
+        <div class="text-center ">
+        {{ form|crispy }}
+ <button class=" justify-content-center btn btn-dark" type="submit">Create Account</button>
+            <div class="m-2">
+                do you have account ? <a href="/login" >Login</a>
+            </div>
+    </div>
+
+
+
+
+</form>
+</div>
+{% endblock %}

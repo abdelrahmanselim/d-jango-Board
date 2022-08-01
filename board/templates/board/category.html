@@ -1,0 +1,107 @@
+{% extends 'board/base.html' %}
+{% load crispy_forms_tags %}
+ {% block nav%}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+<a class="navbar-brand" href="/">Home </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if user.is_superuser %}
+          <a class="nav-link active" aria-current="page" href="/admin">Manage Blog</a>
+        {% endif %}
+        </li>
+        <li class="nav-item">
+         {% if user.is_superuser %}
+          <a class="nav-link active" aria-current="page" href="{{post.first.get_new_post_url}}">Add Post</a>
+        {% endif %}
+        </li>
+         <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <span class="text-success">{{user.username}}</span>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">My Acount</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                <a class="dropdown-item" href="#">Change Password</a>
+          </div>
+          </div>
+      </ul>
+    </div>
+  </div>
+</nav>
+  {% endblock %}
+{% block content %}
+<div class="Container ">
+  <ol class="breadcrumb my-4">
+    <li class="breadcrumb-item" >
+       <a class="link-warning" href="{% url 'index' %}" >
+      Categories
+       </a>
+    </li >
+    <li class="breadcrumb-item active">
+      {{cat.name}}
+    </li>
+  </ol>
+</div>
+
+
+  <h1>{{post.id}}</h1>
+<div class="Container">
+  <div class="row justify-content-center mt-5" >
+    {% for i in post %}
+    <div class="col-8">
+      <div class="card w-75 text-center m-5" >
+           <div class="card-body">
+              <img class="card-img-top mx-auto d-block w-50 m-3 " src="/media/{{i.post_pictures}}" alt="{{i.id}}">
+              <h2 class="card-title">{{i.title}}</h2>
+              <p class="card-text">{{i.content}}</p>
+              <p class="card-text"> {{i.created_by}}</p>
+              <a href="{%url 'postdetails' i.id %}" class="btn btn-primary">view the post</a>
+           </div>
+          {% if postid == i.id %}
+          <div class="card">
+              <div class="card-body">
+          <form method="post">
+               {% csrf_token %}
+                   {{ form|crispy }}
+                  <button class="col-lg-3 btn btn-outline-info d-felx m-2" type="submit">comment</button>
+
+          </form>
+          <a href="{% url 'cat' i.category.id %}">
+                      <button class="col-lg-3 btn btn-outline-danger" type="submit">cancel</button>
+                  </a>
+                  </div>
+            </div>
+          {% else %}
+          <a href="{% url 'addcomment' i.category.id i.id %}">
+          <button class="col-lg-3 btn btn-outline-info m-2" type="submit">Add Comment</button></a>
+          {% endif %}
+          {% for c in comment %}
+          {% if c.post.id == i.id %}
+           <div class="card">
+              <div class="card-body">
+                  <div class="justify-content-center border-0">
+                      <h3 class="m-2 border-0">{{c.comment}}</h3>
+                      </div>
+                  <h4 class=" d-flex">By :{{c.created_by}}</h4>
+                  <div><h5>{{c.created_at}}</h5></div>
+                  {%if c.created_by.id == user.id %}
+                  {{i.category.id}}
+                  {{c.id}}
+                  <a href="{% url 'updatecomment' c.id i.category.id  %}" class="btn btn-warning mx-3">Update</a>
+                  <a href="{% url 'deletecomment' c.id i.category.id  %}" class="btn btn-danger mx-3">Delete</a>
+                  {% endif %}
+              </div>
+            </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+  {% endblock %}
